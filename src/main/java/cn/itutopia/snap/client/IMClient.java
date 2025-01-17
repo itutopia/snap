@@ -16,13 +16,9 @@ import io.netty.handler.codec.string.StringEncoder;
  */
 public class IMClient {
 
-    private String host;
-    private int port;
-
-    public IMClient(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
+    private String host = "localhost";
+    private int port = 8088;
+    private String content = "Hello, Snap IM!";
 
     public void start() throws InterruptedException {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -35,17 +31,11 @@ public class IMClient {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(new StringDecoder());
                             socketChannel.pipeline().addLast(new StringEncoder());
-                            socketChannel.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
-                                @Override
-                                protected void channelRead0(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
-                                    System.out.println("收到服务器的消息:"+ msg);
-                                }
-                            });
                         }
                     });
 
             ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
-            channelFuture.channel().writeAndFlush("你好服务器");
+            channelFuture.channel().writeAndFlush(content);
             channelFuture.channel().closeFuture().sync();
         } finally {
             group.shutdownGracefully();
@@ -53,7 +43,7 @@ public class IMClient {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        new IMClient("localhost", 8088).start();
+        new IMClient().start();
     }
 }
 

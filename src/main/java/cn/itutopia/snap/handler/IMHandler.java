@@ -1,7 +1,10 @@
-package cn.itutopia.snap.server;
+package cn.itutopia.snap.handler;
 
+import cn.itutopia.snap.service.MessagingService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @description:
@@ -9,7 +12,12 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @e-mail: ljch867@163.com
  * @date: 2025/1/17 19:04
  */
+@Component
 public class IMHandler extends SimpleChannelInboundHandler<String> {
+
+    @Autowired
+    private MessagingService messagingService;
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         // 这里处理消息，例如将消息广播到其他客户端，或是保存到数据库

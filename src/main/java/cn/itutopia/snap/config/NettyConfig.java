@@ -1,5 +1,6 @@
-package cn.itutopia.snap.server;
+package cn.itutopia.snap.config;
 
+import cn.itutopia.snap.handler.IMHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -9,6 +10,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import org.springframework.stereotype.Component;
 
 /**
  * @description:
@@ -16,13 +18,10 @@ import io.netty.handler.codec.string.StringEncoder;
  * @e-mail: ljch867@163.com
  * @date: 2025/1/17 18:54
  */
-public class NettyServer {
+@Component
+public class NettyConfig {
 
-    private int port;
-
-    public NettyServer(int port) {
-        this.port = port;
-    }
+    private int port = 8088;
 
     public void start() throws InterruptedException {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -41,6 +40,7 @@ public class NettyServer {
                         }
                     });
             ChannelFuture channelFuture = bootstrap.bind(port).sync();
+            System.out.println("Netty server started on port " + port);
             channelFuture.channel().closeFuture().sync();
         }finally {
             bossGroup.shutdownGracefully();
